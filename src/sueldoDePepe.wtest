@@ -1,0 +1,94 @@
+import sueldoDePepe.*
+
+describe "sueldo de pepe" {
+	test "si es gerente, su neto es 15000" {
+		pepe.categoria(gerente)
+		
+		assert.equals(15000, pepe.neto())
+	}
+	
+	test "si es cadete, su neto es 20000" {
+		pepe.categoria(cadete)
+		
+		assert.equals(20000, pepe.neto())
+	}
+	
+	test "si tiene un bono x resultados de porcentaje, cobra un 10% sobre el neto" {
+		pepe.categoria(cadete)
+		pepe.bonoPorResultados(porcentaje)
+		
+		assert.equals(2000, pepe.cuantoCobraPorBonoPorResultados())
+	}
+	
+	test "si tiene un bono de monto fijo, cobra 800" {
+		pepe.categoria(cadete)
+		pepe.bonoPorResultados(montoFijo)
+		
+		assert.equals(800, pepe.cuantoCobraPorBonoPorResultados())
+	}
+	
+	test "si tiene un bono nulo, cobra 0" {
+		pepe.categoria(cadete)
+		pepe.bonoPorResultados(nulo)
+		
+		assert.equals(0, pepe.cuantoCobraPorBonoPorResultados())
+	}
+	
+	test "si tiene un bono por presentismo normal y no falto nunca, cobra 2000" {
+		pepe.bonoPorPresentismo(normal)
+		
+		assert.equals(2000, pepe.cuantoCobraPorBonoPorPresentismo())
+	}
+	
+	test "si tiene un bono por presentismo normal y falto una vez, cobra 1000" {
+		pepe.bonoPorPresentismo(normal)
+		pepe.falto()
+		
+		assert.equals(1000, pepe.cuantoCobraPorBonoPorPresentismo())
+	}
+	
+	test "si tiene un bono por presentismo normal y falto mas de una vez, cobra 0" {
+		pepe.bonoPorPresentismo(normal)
+		pepe.falto()
+		pepe.falto()
+		
+		assert.equals(0, pepe.cuantoCobraPorBonoPorPresentismo())
+	}
+	
+	test "si tiene un bono por presentismo de ajuste y no falto nunca, cobra 100" {
+		pepe.bonoPorPresentismo(ajuste)
+		
+		assert.equals(100, pepe.cuantoCobraPorBonoPorPresentismo())
+	}
+	
+	test "si tiene un bono por presentismo de ajuste y falto alguna vez, cobra 0" {
+		pepe.bonoPorPresentismo(ajuste)
+		pepe.falto()
+		
+		assert.equals(0, pepe.cuantoCobraPorBonoPorPresentismo())
+	}
+	
+	test "su sueldo se calcula como la suma de el neto + el bono por presentismo + el bono por ajuste" {
+		pepe.categoria(gerente)
+		pepe.bonoPorResultados(porcentaje)
+		pepe.bonoPorPresentismo(normal)
+		pepe.falto()
+		
+		assert.equals(17500, pepe.sueldo())
+	}
+}
+
+describe "sofia" {
+	test "su neto es un 30% mayor al de su categoria" {
+		sofia.categoria(cadete)
+		
+		assert.equals(26000, sofia.neto())
+	}
+	
+	test "su sueldo se calcula como su neto + su bono por resultados" {
+		sofia.categoria(cadete)
+		sofia.bonoPorResultados(montoFijo)
+		
+		assert.equals(26800, sofia.sueldo())
+	}
+}
